@@ -32,6 +32,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
 
 class SearchByIngredientScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,17 +79,25 @@ fun SearchByIngredientContent() {
             onClick = {
                 if (ingredientInput.isNotBlank()) {
                     CoroutineScope(Dispatchers.IO).launch {
-                        val retrievedMeals = searchMealsByIngredient(ingredientInput)
-                        withContext(Dispatchers.Main) {
-                            meals.clear()
-                            meals.addAll(retrievedMeals)
-                            message = if (retrievedMeals.isEmpty()) {
-                                "No meals found"
-                            } else {
-                                "Meals retrieved"
+                        try {
+                            val retrievedMeals = searchMealsByIngredientFromApi(ingredientInput.trim())
+                            withContext(Dispatchers.Main) {
+                                meals.clear()
+                                meals.addAll(retrievedMeals)
+                                message = if (retrievedMeals.isEmpty()) {
+                                    "No meals found"
+                                } else {
+                                    "${retrievedMeals.size} meals retrieved from web service"
+                                }
+                            }
+                        } catch (e: Exception) {
+                            withContext(Dispatchers.Main) {
+                                message = "Error retrieving meals"
                             }
                         }
                     }
+                } else {
+                    message = "Please enter an ingredient"
                 }
             },
             modifier = Modifier.fillMaxWidth()
@@ -101,9 +113,11 @@ fun SearchByIngredientContent() {
                     CoroutineScope(Dispatchers.IO).launch {
                         db.mealDao().insertMeals(meals.toList())
                         withContext(Dispatchers.Main) {
-                            message = "Meals saved to database"
+                            message = "Retrieved meals saved to database"
                         }
                     }
+                } else {
+                    message = "Retrieve meals first"
                 }
             },
             modifier = Modifier.fillMaxWidth()
@@ -125,11 +139,112 @@ fun SearchByIngredientContent() {
     }
 }
 
+fun searchMealsByIngredientFromApi(ingredient: String): List<Meal> {
+    val encodedIngredient = URLEncoder.encode(ingredient, "UTF-8")
+    val filterUrl =
+        "https://www.themealdb.com/api/json/v1/1/filter.php?i=$encodedIngredient"
+
+    val filterResponse = fetchUrlText(filterUrl)
+    val filterJson = JSONObject(filterResponse)
+    val mealsArray = filterJson.optJSONArray("meals") ?: return emptyList()
+
+    val meals = mutableListOf<Meal>()
+
+    for (i in 0 until mealsArray.length()) {
+        val basicMeal = mealsArray.getJSONObject(i)
+        val idMeal = basicMeal.getString("idMeal")
+
+        val lookupUrl =
+            "https://www.themealdb.com/api/json/v1/1/lookup.php?i=$idMeal"
+
+        val lookupResponse = fetchUrlText(lookupUrl)
+        val lookupJson = JSONObject(lookupResponse)
+        val detailArray = lookupJson.optJSONArray("meals") ?: continue
+        val mealObject = detailArray.getJSONObject(0)
+
+        meals.add(parseMealFromJson(mealObject))
+    }
+
+    return meals
+}
+
+fun fetchUrlText(urlString: String): String {
+    val url = URL(urlString)
+    val connection = url.openConnection() as HttpURLConnection
+    connection.requestMethod = "GET"
+    connection.connectTimeout = 10000
+    connection.readTimeout = 10000
+
+    return connection.inputStream.bufferedReader().use { it.readText() }
+}
+
+fun parseMealFromJson(jsonObject: JSONObject): Meal {
+    return Meal(
+        idMeal = jsonObject.optString("idMeal", ""),
+        strMeal = jsonObject.optString("strMeal", ""),
+        strDrinkAlternate = jsonObject.optStringOrNull("strDrinkAlternate"),
+        strCategory = jsonObject.optStringOrNull("strCategory"),
+        strArea = jsonObject.optStringOrNull("strArea"),
+        strInstructions = jsonObject.optStringOrNull("strInstructions"),
+        strMealThumb = jsonObject.optStringOrNull("strMealThumb"),
+        strTags = jsonObject.optStringOrNull("strTags"),
+        strYoutube = jsonObject.optStringOrNull("strYoutube"),
+        strIngredient1 = jsonObject.optStringOrNull("strIngredient1"),
+        strIngredient2 = jsonObject.optStringOrNull("strIngredient2"),
+        strIngredient3 = jsonObject.optStringOrNull("strIngredient3"),
+        strIngredient4 = jsonObject.optStringOrNull("strIngredient4"),
+        strIngredient5 = jsonObject.optStringOrNull("strIngredient5"),
+        strIngredient6 = jsonObject.optStringOrNull("strIngredient6"),
+        strIngredient7 = jsonObject.optStringOrNull("strIngredient7"),
+        strIngredient8 = jsonObject.optStringOrNull("strIngredient8"),
+        strIngredient9 = jsonObject.optStringOrNull("strIngredient9"),
+        strIngredient10 = jsonObject.optStringOrNull("strIngredient10"),
+        strIngredient11 = jsonObject.optStringOrNull("strIngredient11"),
+        strIngredient12 = jsonObject.optStringOrNull("strIngredient12"),
+        strIngredient13 = jsonObject.optStringOrNull("strIngredient13"),
+        strIngredient14 = jsonObject.optStringOrNull("strIngredient14"),
+        strIngredient15 = jsonObject.optStringOrNull("strIngredient15"),
+        strIngredient16 = jsonObject.optStringOrNull("strIngredient16"),
+        strIngredient17 = jsonObject.optStringOrNull("strIngredient17"),
+        strIngredient18 = jsonObject.optStringOrNull("strIngredient18"),
+        strIngredient19 = jsonObject.optStringOrNull("strIngredient19"),
+        strIngredient20 = jsonObject.optStringOrNull("strIngredient20"),
+        strMeasure1 = jsonObject.optStringOrNull("strMeasure1"),
+        strMeasure2 = jsonObject.optStringOrNull("strMeasure2"),
+        strMeasure3 = jsonObject.optStringOrNull("strMeasure3"),
+        strMeasure4 = jsonObject.optStringOrNull("strMeasure4"),
+        strMeasure5 = jsonObject.optStringOrNull("strMeasure5"),
+        strMeasure6 = jsonObject.optStringOrNull("strMeasure6"),
+        strMeasure7 = jsonObject.optStringOrNull("strMeasure7"),
+        strMeasure8 = jsonObject.optStringOrNull("strMeasure8"),
+        strMeasure9 = jsonObject.optStringOrNull("strMeasure9"),
+        strMeasure10 = jsonObject.optStringOrNull("strMeasure10"),
+        strMeasure11 = jsonObject.optStringOrNull("strMeasure11"),
+        strMeasure12 = jsonObject.optStringOrNull("strMeasure12"),
+        strMeasure13 = jsonObject.optStringOrNull("strMeasure13"),
+        strMeasure14 = jsonObject.optStringOrNull("strMeasure14"),
+        strMeasure15 = jsonObject.optStringOrNull("strMeasure15"),
+        strMeasure16 = jsonObject.optStringOrNull("strMeasure16"),
+        strMeasure17 = jsonObject.optStringOrNull("strMeasure17"),
+        strMeasure18 = jsonObject.optStringOrNull("strMeasure18"),
+        strMeasure19 = jsonObject.optStringOrNull("strMeasure19"),
+        strMeasure20 = jsonObject.optStringOrNull("strMeasure20"),
+        strSource = jsonObject.optStringOrNull("strSource"),
+        strImageSource = jsonObject.optStringOrNull("strImageSource"),
+        strCreativeCommonsConfirmed = jsonObject.optStringOrNull("strCreativeCommonsConfirmed"),
+        dateModified = jsonObject.optStringOrNull("dateModified")
+    )
+}
+
+fun JSONObject.optStringOrNull(key: String): String? {
+    if (!has(key) || isNull(key)) return null
+    val value = optString(key, "").trim()
+    return if (value.isEmpty()) null else value
+}
+
 @Composable
 fun MealItem(meal: Meal) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Text("Meal: ${meal.strMeal}")
         Text("Drink Alternate: ${meal.strDrinkAlternate}")
         Text("Category: ${meal.strCategory}")

@@ -2,6 +2,7 @@ package com.example.mealprepper
 
 val sampleMeals = listOf(
     Meal(
+        idMeal = "52947",
         strMeal = "Sweet and Sour Pork",
         strDrinkAlternate = null,
         strCategory = "Pork",
@@ -36,6 +37,7 @@ val sampleMeals = listOf(
         dateModified = null
     ),
     Meal(
+        idMeal = "52850",
         strMeal = "Chicken Marengo",
         strDrinkAlternate = null,
         strCategory = "Chicken",
@@ -70,6 +72,7 @@ val sampleMeals = listOf(
         dateModified = null
     ),
     Meal(
+        idMeal = "52997",
         strMeal = "Beef Banh Mi Bowls with Sriracha Mayo, Carrot & Pickled Cucumber",
         strDrinkAlternate = null,
         strCategory = "Beef",
@@ -104,6 +107,7 @@ val sampleMeals = listOf(
         dateModified = null
     ),
     Meal(
+        idMeal = "52973",
         strMeal = "Leblebi Soup",
         strDrinkAlternate = null,
         strCategory = "Vegetarian",
