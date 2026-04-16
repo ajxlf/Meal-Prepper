@@ -8,7 +8,7 @@ The app combines a local **Room** database with the **TheMealDB** web service so
 
 ## Screenshots
 
-> _Will add screenshots here once testing has been completed._
+> _Screenshots showing functionality (taken during testing)._
 
 - Main menu
 <img width="360" height="800" alt="image" src="https://github.com/user-attachments/assets/f94b64b3-cca9-450f-b241-8d261add8976" />
