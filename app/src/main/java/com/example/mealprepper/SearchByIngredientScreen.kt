@@ -169,13 +169,17 @@ fun searchMealsByIngredientFromApi(ingredient: String): List<Meal> {
 }
 
 fun fetchUrlText(urlString: String): String {
-    val url = URL(urlString)
-    val connection = url.openConnection() as HttpURLConnection
-    connection.requestMethod = "GET"
-    connection.connectTimeout = 10000
-    connection.readTimeout = 10000
+    val connection = (URL(urlString).openConnection() as HttpURLConnection).apply {
+        requestMethod = "GET"
+        connectTimeout = 10000
+        readTimeout = 10000
+    }
 
-    return connection.inputStream.bufferedReader().use { it.readText() }
+    return try {
+        connection.inputStream.bufferedReader().use { it.readText() }
+    } finally {
+        connection.disconnect()
+    }
 }
 
 fun parseMealFromJson(jsonObject: JSONObject): Meal {
