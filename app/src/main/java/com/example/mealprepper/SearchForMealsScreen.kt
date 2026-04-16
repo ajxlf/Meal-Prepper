@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,9 +52,15 @@ fun SearchForMealsContent() {
     val context = LocalContext.current
     val db = MealDatabase.getDatabase(context)
 
-    var searchInput by remember { mutableStateOf("") }
-    var message by remember { mutableStateOf("") }
-    val meals = remember { mutableStateListOf<Meal>() }
+    var searchInput by rememberSaveable { mutableStateOf("") }
+    var message by rememberSaveable { mutableStateOf("") }
+    var mealsJson by rememberSaveable { mutableStateOf("[]") }
+
+    val meals = remember(mealsJson) {
+        mutableStateListOf<Meal>().apply {
+            addAll(mealsFromJsonString(mealsJson))
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -82,8 +89,7 @@ fun SearchForMealsContent() {
                     CoroutineScope(Dispatchers.IO).launch {
                         val results = db.mealDao().searchMeals(searchInput.trim())
                         withContext(Dispatchers.Main) {
-                            meals.clear()
-                            meals.addAll(results)
+                            mealsJson = mealsToJsonString(results)
                             message = if (results.isEmpty()) {
                                 "No meals found"
                             } else {
@@ -126,7 +132,7 @@ fun MealSearchItem(meal: Meal) {
                 } else {
                     null
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 null
             }
         }

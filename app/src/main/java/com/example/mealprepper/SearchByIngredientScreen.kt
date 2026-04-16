@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,9 +50,15 @@ fun SearchByIngredientContent() {
     val context = LocalContext.current
     val db = MealDatabase.getDatabase(context)
 
-    var ingredientInput by remember { mutableStateOf("") }
-    var message by remember { mutableStateOf("") }
-    val meals = remember { mutableStateListOf<Meal>() }
+    var ingredientInput by rememberSaveable { mutableStateOf("") }
+    var message by rememberSaveable { mutableStateOf("") }
+    var mealsJson by rememberSaveable { mutableStateOf("[]") }
+
+    val meals = remember(mealsJson) {
+        mutableStateListOf<Meal>().apply {
+            addAll(mealsFromJsonString(mealsJson))
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -82,15 +89,14 @@ fun SearchByIngredientContent() {
                         try {
                             val retrievedMeals = searchMealsByIngredientFromApi(ingredientInput.trim())
                             withContext(Dispatchers.Main) {
-                                meals.clear()
-                                meals.addAll(retrievedMeals)
+                                mealsJson = mealsToJsonString(retrievedMeals)
                                 message = if (retrievedMeals.isEmpty()) {
                                     "No meals found"
                                 } else {
                                     "${retrievedMeals.size} meals retrieved from web service"
                                 }
                             }
-                        } catch (e: Exception) {
+                        } catch (_: Exception) {
                             withContext(Dispatchers.Main) {
                                 message = "Error retrieving meals"
                             }
@@ -243,7 +249,7 @@ fun parseMealFromJson(jsonObject: JSONObject): Meal {
 fun JSONObject.optStringOrNull(key: String): String? {
     if (!has(key) || isNull(key)) return null
     val value = optString(key, "").trim()
-    return if (value.isEmpty()) null else value
+    return value.ifEmpty { null }
 }
 
 @Composable
