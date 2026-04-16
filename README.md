@@ -11,15 +11,39 @@ The app combines a local **Room** database with the **TheMealDB** web service so
 > _Will add screenshots here once testing has been completed._
 
 - Main menu
+<img width="360" height="800" alt="image" src="https://github.com/user-attachments/assets/f94b64b3-cca9-450f-b241-8d261add8976" />
+
 - Main Menu (Rotated)
+<img width="800" height="360" alt="image" src="https://github.com/user-attachments/assets/20ad5b25-5195-4092-abb4-d8355e448db7" />
+
+
 - Add Meals to DB screen
+<img width="360" height="800" alt="image" src="https://github.com/user-attachments/assets/1986a1dd-3a5f-4291-9cfa-6355ce4e880d" />
+<img width="360" height="800" alt="image" src="https://github.com/user-attachments/assets/84f4d11f-6d14-49e2-8f70-5ff017a50233" />
+
 - Add Meals to DB screen (Rotated)
+<img width="800" height="360" alt="image" src="https://github.com/user-attachments/assets/9a669863-7a66-4ba7-b2ec-11722fc4219b" />
+
 - Search by Ingredient screen
+<img width="360" height="800" alt="image" src="https://github.com/user-attachments/assets/41fd334c-8342-42b4-8604-e28601c4018e" />
+<img width="360" height="800" alt="image" src="https://github.com/user-attachments/assets/2c0024df-e04a-402d-be18-50a680d888ea" />
+
 - Search by Ingredient screen (Rotated)
+<img width="800" height="360" alt="image" src="https://github.com/user-attachments/assets/b41d98f8-2ba1-4086-a5b7-81b7aa25895e" />
+
 - Search for Meals (database) screen
+<img width="360" height="800" alt="image" src="https://github.com/user-attachments/assets/9c76ce89-cd1a-473f-bd98-30491b822112" />
+<img width="360" height="800" alt="image" src="https://github.com/user-attachments/assets/97966bd2-3402-4ea9-8e6b-430b97871be6" />
+
 - Search for Meals (database) screen (Rotated)
+<img width="800" height="360" alt="image" src="https://github.com/user-attachments/assets/94f71a8e-a2c0-4c2e-9078-007226ac9745" />
+
 - Search Meals by Name (web) screen
+<img width="360" height="800" alt="image" src="https://github.com/user-attachments/assets/1be5a2b6-e75e-4637-a6dd-b9525eb55124" />
+<img width="360" height="800" alt="image" src="https://github.com/user-attachments/assets/f3b66214-8495-4af2-b985-1c150c871400" />
+
 - Search Meals by Name (web) screen (Rotated)
+<img width="800" height="360" alt="image" src="https://github.com/user-attachments/assets/68c0c6ff-5ade-4c5e-9f2b-3b9d670654d9" />
 
 ---
 
