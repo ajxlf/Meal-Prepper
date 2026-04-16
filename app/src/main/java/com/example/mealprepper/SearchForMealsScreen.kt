@@ -117,14 +117,18 @@ fun SearchForMealsContent() {
 @Composable
 fun MealSearchItem(meal: Meal) {
     val bitmapState = produceState<Bitmap?>(initialValue = null, key1 = meal.strMealThumb) {
-        value = try {
-            if (!meal.strMealThumb.isNullOrEmpty()) {
-                BitmapFactory.decodeStream(URL(meal.strMealThumb).openStream())
-            } else {
+        value = withContext(Dispatchers.IO) {
+            try {
+                if (!meal.strMealThumb.isNullOrBlank()) {
+                    URL(meal.strMealThumb).openStream().use { inputStream ->
+                        BitmapFactory.decodeStream(inputStream)
+                    }
+                } else {
+                    null
+                }
+            } catch (e: Exception) {
                 null
             }
-        } catch (e: Exception) {
-            null
         }
     }
 
@@ -134,10 +138,15 @@ fun MealSearchItem(meal: Meal) {
             .padding(8.dp),
         verticalAlignment = Alignment.Top
     ) {
-        bitmapState.value?.let { bitmap ->
+        if (bitmapState.value != null) {
             Image(
-                bitmap = bitmap.asImageBitmap(),
+                bitmap = bitmapState.value!!.asImageBitmap(),
                 contentDescription = meal.strMeal,
+                modifier = Modifier.size(100.dp)
+            )
+        } else {
+            Text(
+                text = "[No Image]",
                 modifier = Modifier.size(100.dp)
             )
         }
