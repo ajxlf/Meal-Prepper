@@ -75,7 +75,18 @@ fun DisplayMenu() {
             },
             modifier = Modifier.fillMaxWidth(0.8f)
         ) {
-            Text("Search for Meals")
+            Text("Search for Meals (Database)")
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(
+            onClick = {
+                context.startActivity(Intent(context, SearchMealsByNameScreen::class.java))
+            },
+            modifier = Modifier.fillMaxWidth(0.8f)
+        ) {
+            Text("Search Meals By Name (Web)")
         }
     }
 }
