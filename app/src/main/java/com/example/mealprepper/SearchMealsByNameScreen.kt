@@ -44,6 +44,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
+// Compose activity setup based on Lecture 4
+// rememberSaveable usage based on Lecture 6
+
 class SearchMealsByNameScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -40,6 +40,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
 
+// Compose screen structure based on Lecture 4.
+// rememberSaveable state restoration based on Lecture 6.
+// Room database search and coroutine-based background work based on Lecture 9.
+// Also used Android documentation to further understand produceState and BitmapFactory:
+// (https://developer.android.com/reference/kotlin/androidx/compose/runtime/produceState.composable and https://developer.android.com/reference/android/graphics/BitmapFactory)
+
 class SearchForMealsScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -5,6 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
+// Room database class design, including @Database, RoomDatabase inheritance, DAO access, and Room.databaseBuilder setup, based on Lecture 9 - Working with Databases Part II.
+
 @Database(entities = [Meal::class], version = 2, exportSchema = false)
 abstract class MealDatabase : RoomDatabase() {
 

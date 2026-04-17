@@ -38,6 +38,10 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
+// Compose screen structure based on Lecture 4.
+// rememberSaveable state handling based on Lecture 6.
+// Database save/retrieve flow and coroutine-based Room usage based on Lecture 9.
+
 class SearchByIngredientScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

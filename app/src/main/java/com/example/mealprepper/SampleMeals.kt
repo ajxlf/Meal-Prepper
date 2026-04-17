@@ -1,5 +1,7 @@
 package com.example.mealprepper
 
+// Meals hardcoded from link provided in the specification: https://ddracopo.github.io/DOCUM/courses/5cosc023w/meals.txt
+
 val sampleMeals = listOf(
     Meal(
         idMeal = "52947",

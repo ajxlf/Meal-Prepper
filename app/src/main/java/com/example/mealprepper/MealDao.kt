@@ -5,6 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
+// Room DAO structure, including @Dao, @Query, @Insert, and suspend database methods, based on Lecture 9 - Working with Databases Part II.
+
 @Dao
 interface MealDao {
 

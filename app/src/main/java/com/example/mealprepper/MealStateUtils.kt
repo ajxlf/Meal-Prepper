@@ -3,6 +3,9 @@ package com.example.mealprepper
 import org.json.JSONArray
 import org.json.JSONObject
 
+// Use of JSONObject, JSONArray, put(), optString(), has(), isNull()JSON and serialisation/deserialisation logic was drawn from Android org.json documentation.
+// https://developer.android.com/reference/kotlin/org/json/package-summary
+
 fun mealsToJsonString(meals: List<Meal>): String {
     val jsonArray = JSONArray()
 
